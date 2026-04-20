@@ -1,0 +1,18 @@
+{
+  "name": "agendaguru-backend",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Local backend for AgendaGuru multi-user app",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node server.js",
+    "build": "echo 'Building AgendaGuru... (Static site, no compilation needed)'"
+  },
+  "dependencies": {
+    "@libsql/client": "^0.17.2",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "pg": "^8.20.0"
+  }
+}
