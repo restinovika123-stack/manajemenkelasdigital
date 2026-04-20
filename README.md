@@ -1,4 +1,4 @@
-# AgendaGuru
+# AgendaGuru - Manajemen Kelas Digital
 
 Classroom management application for attendance, grading, scheduling, and journals.
 
