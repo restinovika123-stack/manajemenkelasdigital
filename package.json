@@ -4,8 +4,8 @@
   "private": true,
   "description": "Local backend for AgendaGuru multi-user app",
   "scripts": {
-    "start": "node server.js",
-    "dev": "node server.js",
+    "start": "node api/index.js",
+    "dev": "node api/index.js",
     "build": "echo 'Building AgendaGuru... (Static site, no compilation needed)'"
   },
   "dependencies": {

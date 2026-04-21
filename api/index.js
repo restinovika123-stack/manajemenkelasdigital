@@ -6,7 +6,7 @@ const crypto = require('crypto');
 const { createClient } = require('@libsql/client');
 require('dotenv').config();
 
-const ROOT_DIR = __dirname;
+const ROOT_DIR = path.join(__dirname, '..');
 const PORT = Number(process.env.PORT || 3000);
 const HOST = process.env.HOST || '127.0.0.1';
 const DATA_DIR = path.join(ROOT_DIR, 'backend-data');
