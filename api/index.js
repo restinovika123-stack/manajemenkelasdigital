@@ -562,6 +562,11 @@ app.put('/api/users/:userId/profile', async (req, res) => {
   res.json({ user: sanitizeUser(updated.rows[0]) });
 });
 
+// Catch-all route to serve index.html for frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(ROOT_DIR, 'index.html'));
+});
+
 // Init and Start
 module.exports = app;
 
