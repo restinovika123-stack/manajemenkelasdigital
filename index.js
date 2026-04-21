@@ -31,6 +31,10 @@ const client = createClient({
   authToken: useTurso ? process.env.TURSO_AUTH_TOKEN : undefined,
 });
 
+if (process.env.VERCEL && !useTurso) {
+  console.error('CRITICAL: TURSO_DATABASE_URL and TURSO_AUTH_TOKEN must be set for Vercel deployment.');
+}
+
 // Mock PG Pool for absolute compatibility with existing logic
 const pool = {
   async query(text, params = []) {
@@ -464,13 +468,20 @@ app.use(express.static(ROOT_DIR));
 
 // Database Readiness Middleware
 app.use(async (req, res, next) => {
-  if (req.path === '/api/health') return next();
+  if (req.path === '/api/health' || !req.path.startsWith('/api')) return next();
   try {
+    if (process.env.VERCEL && !useTurso) {
+       throw new Error('TURSO_DATABASE_URL and TURSO_AUTH_TOKEN are missing in Vercel environment.');
+    }
     await ensureDbInitialized();
     next();
   } catch (err) {
-    console.error('Database Initialization Error:', err);
-    res.status(500).json({ error: 'Database initialization failed' });
+    console.error('Database Initialization Error:', err.message);
+    res.status(500).json({ 
+      error: 'Database initialization failed', 
+      message: err.message,
+      tip: 'Ensure TURSO_DATABASE_URL and TURSO_AUTH_TOKEN are set in Vercel environment variables.'
+    });
   }
 });
 
@@ -562,10 +573,8 @@ app.put('/api/users/:userId/profile', async (req, res) => {
   res.json({ user: sanitizeUser(updated.rows[0]) });
 });
 
-// Catch-all route to serve index.html for frontend
-app.get('*', (req, res) => {
-  res.sendFile(path.join(ROOT_DIR, 'index.html'));
-});
+// Remove the catch-all route that used res.sendFile as it fails on Vercel
+// Vercel handles static routing via vercel.json rewrites and its native edge server
 
 // Init and Start
 module.exports = app;
